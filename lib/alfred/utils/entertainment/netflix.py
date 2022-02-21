@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from decouple import config
 
 
-def netflix(jarvis, query):
+def netflix(bot, query):
     driver = webdriver.Edge()
     driver.get('https://www.netflix.com/')
     log_in_btn = driver.find_element_by_class_name("authLinks")
@@ -53,15 +53,15 @@ def netflix(jarvis, query):
             exact_match = movie
 
     if exact_match is not None:
-        jarvis.read([
+        bot.read([
             'Sir I found a movie that matches your query', exact_match[
                 'title'], 'Would you like to watch it?'
         ])
-        user_input = jarvis.take_user_input()
+        user_input = bot.take_user_input()
         if 'yes' in user_input:
-            jarvis.speak('Opening Netflix')
+            bot.speak('Opening Netflix')
             web.open(exact_match['link_to_watch'])
-            jarvis.speak('Enjoy the movie')
+            bot.speak('Enjoy the movie')
     else:
-        jarvis.speak('Printing what i found to the screen for you sir')
+        bot.speak('Printing what i found to the screen for you sir')
         print(json.dumps(movies, indent=2))

@@ -4,38 +4,38 @@ import requests
 from lib.alfred.utils.weather.open_weather import Weather
 
 
-def tell_joke(jarvis):
+def tell_joke(bot):
     headers = {
         'Accept': 'application/json'
     }
     res = requests.get("https://icanhazdadjoke.com/",
                        headers=headers).json()
-    jarvis.speak(res["joke"])
+    bot.speak(res["joke"])
 
 
-def give_advice(jarvis):
+def give_advice(bot):
     res = requests.get("https://api.adviceslip.com/advice").json()
-    jarvis.read(['Here is your pro tip',  res['slip']['advice']])
+    bot.read(['Here is your pro tip',  res['slip']['advice']])
 
 
-def info_lookup(jarvis, command):
+def info_lookup(bot, command):
     query = command.split('tell me about')[1]
     res = kit.info(query, return_value=True)
-    jarvis.read([f'Results for{query}', res])
+    bot.read([f'Results for{query}', res])
 
 
-def give_current_weather(jarvis):
-    jarvis.read(Weather().current_weather())
+def give_current_weather(bot):
+    bot.read(Weather().current_weather())
 
 
-def search(jarvis, command):
+def search(bot, command):
     query = command.split('search')[1]
     link = f"https://www.duckduckgo.com/?q={query}"
-    jarvis.read([f'Here is what I found for {query}',
-                'Opening results in a new tab, Sir...'])
+    bot.read([f'Here is what I found for {query}',
+              'Opening results in a new tab, Sir...'])
     web.open(link)
 
 
-def play_on_youtube(jarvis, video):
-    jarvis.speak('Opening video in a new tab, Sir...')
+def play_on_youtube(bot, video):
+    bot.speak('Opening video in a new tab, Sir...')
     kit.playonyt(video)
