@@ -13,7 +13,7 @@ def voice_controller(self):
     with m as source:
         r.adjust_for_ambient_noise(source)
         r.energy_threshold = r.energy_threshold * 1.12
-        stdout.write(f"[{Colors.green(r.energy_threshold)}]\n")
+        # stdout.write(f"[{Colors.green(r.energy_threshold)}]\n")
         r.pause_threshold = 2
         stdout.write(
             f"{Colors.cyan('% ')}listening...\n")

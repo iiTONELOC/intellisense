@@ -1,7 +1,7 @@
 from lib.alfred.utils.entertainment.netflix import netflix
 from lib.alfred.utils.misc import tell_joke, give_advice, info_lookup, search
 from lib.alfred.utils.misc import give_current_weather, play_on_youtube
-from lib.lg.tv_controller import living_room_tv_voice_controller
+from lib.tvs.lg.tv_controller import living_room_tv_voice_controller
 from lib.alfred.utils.os_controller.controller import os_query_handler
 from decouple import config
 

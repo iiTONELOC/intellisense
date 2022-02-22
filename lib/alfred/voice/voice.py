@@ -30,9 +30,9 @@ class Voice:
         # FIXME add username
         hour = datetime.now().hour
         if (hour >= 6) and (hour < 12):
-            self.speak(text=f"Good Morning sir\n")
+            self.speak(f"Good Morning sir")
         elif (hour >= 12) and (hour < 16):
-            self.speak(text=f"Good afternoon sir\n")
+            self.speak(f"Good afternoon sir")
         elif (hour >= 16) and (hour < 19):
-            self.speak(text=f"Good Evening sir\n")
-        self.speak(text=f"I am {BOTNAME}. How may I assist you?\n")
+            self.speak(f"Good Evening sir")
+        self.speak(f"I am {BOTNAME}. How may I assist you?")

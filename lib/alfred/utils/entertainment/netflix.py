@@ -7,7 +7,7 @@ from decouple import config
 
 
 def netflix(bot, query):
-    driver = webdriver.Edge()
+    driver = webdriver.Edge(executable_path=config('EDGE_DRIVER'))
     driver.get('https://www.netflix.com/')
     log_in_btn = driver.find_element_by_class_name("authLinks")
     log_in_btn.click()
@@ -25,7 +25,7 @@ def netflix(bot, query):
     sleep(2.5)
     driver.find_element_by_xpath(
         '/html/body/div[1]/div/div/div[1]/div[1]/div[2]/div/div/ul/li[4]/div/a').click()
-    sleep(10)
+    sleep(3.5)
     driver.find_element_by_class_name(
         'icon-search').click()
     driver.find_element_by_id('searchInput').send_keys(
@@ -62,6 +62,9 @@ def netflix(bot, query):
             bot.speak('Opening Netflix')
             web.open(exact_match['link_to_watch'])
             bot.speak('Enjoy the movie')
+        else:
+            bot.speak('Printing what i found to the screen for you sir')
+            print(json.dumps(movies, indent=2))
     else:
         bot.speak('Printing what i found to the screen for you sir')
         print(json.dumps(movies, indent=2))

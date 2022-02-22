@@ -9,11 +9,10 @@ def kitchen_data():
 
 
 def get_devices():
-    stdout.write(f"\n  Kitchen... ")
+    stdout.write(f"\n  Loading Kitchen... ")
     data = kitchen_data()
     all_devices = {}
     for wemo_device, device in data.items():
-        stdout.write(f"\n    Gathering devices... ")
         if wemo_device == 'single_pole_outlets':
             for props in device:
                 all_devices["Switch 1"] = WemoSwitch(**dict(props))
