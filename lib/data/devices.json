@@ -18,19 +18,14 @@
     },
     "living_room": {
         "tv": {
-            "name": "Living Room TV",
+            "name": "LG TV",
             "type": "LG"
         }
     },
     "office": {
-        "outlets": [
-            {
-                "name": "auxiliary monitors",
-                "type": "smart plug",
-                "model": "SK521-WU",
-                "item/article": "OWS221",
-                "out1": "monitors 2-6"
-            }
-        ]
+        "tv": {
+            "name": "Vizio Tv",
+            "type": "Vizio"
+        }
     }
 }

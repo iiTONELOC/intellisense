@@ -4,12 +4,12 @@ from .controls import *
 B_NAME = config('BOTNAME').lower()
 
 commands = {
-    "tv power off": lambda query, bot: bot.devices['Living Room Tv'].remote.turn_off(),
-    "tv screen off": lambda query, bot: bot.devices['Living Room Tv'].remote.screen_off(),
-    "tv screen on": lambda query, bot: bot.devices['Living Room Tv'].remote.screen_on(),
-    "tv launch": lambda query, bot: bot.devices['Living Room Tv'].remote.launch_app(query),
-    "tv info": lambda query, bot: bot.devices['Living Room Tv'].remote.tv.systemControls.info(),
-    "tv exit": lambda query, bot: bot.devices['Living Room Tv'].remote.exit_button(),
+    "tv power off": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.turn_off(),
+    "tv screen off": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.screen_off(),
+    "tv screen on": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.screen_on(),
+    "tv launch": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.launch_app(query),
+    "tv info": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.tv.systemControls.info(),
+    "tv exit": lambda query, bot: bot.rooms['Living Room']['LG TV'].remote.exit_button(),
 }
 
 

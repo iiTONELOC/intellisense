@@ -60,6 +60,9 @@ class LGTV:
         self.tvControls = TvControl(self.client)
         self.name = name
         self.remote = Remote(self)
+        # COMMENTED OUT BC THIS TV IS ON A DIFFERENT NETWORK
+        # WILL ADD THE CONTROLLER LATER
+
         # if self.client is not None:
         #     client = self.client
         #     client.connect()

@@ -1,4 +1,4 @@
-import pywhatkit as kit
+import wikipedia
 import webbrowser as web
 import requests
 from lib.alfred.utils.weather.open_weather import Weather
@@ -20,7 +20,7 @@ def give_advice(bot):
 
 def info_lookup(bot, command):
     query = command.split('tell me about')[1]
-    res = kit.info(query, return_value=True)
+    res = wikipedia.summary(query, sentences=3)
     bot.read([f'Results for{query}', res])
 
 

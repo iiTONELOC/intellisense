@@ -1,28 +1,23 @@
-from sys import stdout
 from .wemo import WemoSwitch
-from lib.utils.colors import Colors
-from lib.utils.load_data import load_data_from_json
+from.room import Room
 
 
-def kitchen_data():
-    return load_data_from_json('devices', 'kitchen')
-
-
-def get_devices():
-    stdout.write(f"\n  Loading Kitchen... ")
-    data = kitchen_data()
+def get_devices(self):
+    self.stdout(f"  Loading Kitchen... ")
+    data = self.loader('devices', 'kitchen')
     all_devices = {}
     for wemo_device, device in data.items():
-        if wemo_device == 'single_pole_outlets':
+        if wemo_device == 'outlets':
             for props in device:
-                all_devices["Switch 1"] = WemoSwitch(**dict(props))
-    stdout.write(f"[{Colors.green('OK')}]\n")
+                all_devices[props['name']] = WemoSwitch(**dict(props))
+    self.stdout(f"[{self.Colors.green('OK')}]\n")
     return all_devices
 
 
-class Kitchen:
+class Kitchen(Room):
     def __init__(self, devices=None):
-        self.devices = get_devices()
+        super().__init__('Kitchen')
+        self.devices = get_devices(self)
 
 
 if __name__ == "__main__":

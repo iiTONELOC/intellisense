@@ -1,4 +1,4 @@
-from sys import stdout
+import sys
 from decouple import config
 import speech_recognition as sr
 from random import choice
@@ -15,26 +15,19 @@ def voice_controller(self):
         r.energy_threshold = r.energy_threshold * 1.12
         # stdout.write(f"[{Colors.green(r.energy_threshold)}]\n")
         r.pause_threshold = 2
-        stdout.write(
+        sys.stdout.write(
             f"{Colors.cyan('% ')}listening...\n")
         audio = r.listen(source)
         try:
-            stdout.write(
+            sys.stdout.write(
                 f"{Colors.cyan('% ')}recognizing...\n")
             query = str(r.recognize_google(audio, language='en-us')).lower()
-            if query == f'{B_NAME} exit' or query == f'{B_NAME} stop listening':
-                hour = datetime.now().hour
-                if hour >= 21 and hour < 6:
-                    self.speak("Good night sir, take care!\n")
-                else:
-                    self.speak('Have a good day sir!\n')
-                exit()
-            elif B_NAME in query:
-                self.speak(choice([
-                    "Cool, I'm on it sir.\n",
-                    "Okay sir, I'm working on it.\n",
-                    "Just a second sir.\n",
-                ]))
+
+            self.speak(choice([
+                "Cool, I'm on it sir.\n",
+                "Okay sir, I'm working on it.\n",
+                "Just a second sir.\n",
+            ]))
         except Exception:
             query = 'None'
         return query

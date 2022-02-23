@@ -1,6 +1,7 @@
 from lib.alfred.utils.entertainment.netflix import netflix
 from lib.alfred.utils.misc import tell_joke, give_advice, info_lookup, search
 from lib.alfred.utils.misc import give_current_weather, play_on_youtube
+from lib.tvs.vizio.tv_controller import office_tv_voice_controller
 from lib.tvs.lg.tv_controller import living_room_tv_voice_controller
 from lib.alfred.utils.os_controller.controller import os_query_handler
 from decouple import config
@@ -9,13 +10,15 @@ B_NAME = config('BOTNAME').lower()
 
 voice_commands = {
     # OS RELATED COMMANDS
-    "launch": lambda query, bot: os_query_handler(query, bot),
-    "open": lambda query, bot: os_query_handler(query, bot),
+    f"{B_NAME} launch": lambda query, bot: os_query_handler(query, bot),
+    f"{B_NAME} open": lambda query, bot: os_query_handler(query, bot),
     # home automation/devices
     # kitchen
-    "toggle kitchen light": lambda query, bot: bot.devices['Switch 1'].toggle(),
+    f"{B_NAME} toggle kitchen light": lambda query, bot: bot.devices['Switch 1'].toggle(),
+    # office:
+    f"{B_NAME} living room tv": lambda query, bot: living_room_tv_voice_controller(bot, query),
     # living room
-    f"{B_NAME} living room living room tv": lambda query, bot: living_room_tv_voice_controller(bot, query),
+    f"{B_NAME} office tv": lambda query, bot: office_tv_voice_controller(bot, query),
     #  BOT COMPUTER COMMANDS
     f"{B_NAME} netflix": lambda query, bot: netflix(bot, query),
     f"{B_NAME} current weather": lambda query, bot: give_current_weather(bot),
