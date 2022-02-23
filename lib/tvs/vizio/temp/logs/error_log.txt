@@ -1,0 +1,13 @@
+INFO:pyvizio.cli:Turning OFF
+INFO:pyvizio.cli:OK
+Exception ignored in: <function _ProactorBasePipeTransport.__del__ at 0x00000234C7FC7AC0>
+Traceback (most recent call last):
+  File "C:\Python310\lib\asyncio\proactor_events.py", line 116, in __del__
+    self.close()
+  File "C:\Python310\lib\asyncio\proactor_events.py", line 108, in close
+    self._loop.call_soon(self._call_connection_lost, None)
+  File "C:\Python310\lib\asyncio\base_events.py", line 745, in call_soon
+    self._check_closed()
+  File "C:\Python310\lib\asyncio\base_events.py", line 510, in _check_closed
+    raise RuntimeError('Event loop is closed')
+RuntimeError: Event loop is closed
