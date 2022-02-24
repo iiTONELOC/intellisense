@@ -2,4 +2,5 @@
 tinytuya.json
 .env
 venv
+lib\vizio\temp\
 __pycache__/

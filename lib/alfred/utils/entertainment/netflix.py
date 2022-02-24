@@ -6,7 +6,22 @@ from selenium.webdriver.common.by import By
 from decouple import config
 
 
+def write_results(results):
+    UI_FOLDER = config('UI_FOLDER')
+    with open(UI_FOLDER+'\\movies\\search_results.js', 'w') as f:
+        f.write('const data =' + results)
+
+
+def show_movies(results, bot):
+    bot.speak('Printing what I found to the screen for you sir')
+    write_results(json.dumps(results, indent=2))
+    sleep(.5)
+    # open the HTML file that we created
+    web.open(config('UI_FOLDER')+'\\movies\\index.html')
+
+
 def netflix(bot, query):
+    movies = []
     driver = webdriver.Edge(executable_path=config('EDGE_DRIVER'))
     driver.get('https://www.netflix.com/')
     log_in_btn = driver.find_element_by_class_name("authLinks")
@@ -30,8 +45,8 @@ def netflix(bot, query):
         'icon-search').click()
     driver.find_element_by_id('searchInput').send_keys(
         query.split('netflix')[1])
-    sleep(1.5)
-    movies = []
+    sleep(2.5)
+
     for i in range(0, 60):
         try:
             res = driver.find_element(By.ID,
@@ -39,13 +54,20 @@ def netflix(bot, query):
             if res:
                 movie = res.find_element(By.CLASS_NAME,
                                          'slider-refocus')
+                # get image
+                img_div = movie.find_element(By.CLASS_NAME, 'boxart-container')
+                movie_img_src = img_div.find_element(
+                    By.TAG_NAME, 'img').get_attribute('src')
                 movies.append(
-                    {'title': movie.text, 'link_to_watch': movie.get_attribute('href')})
+                    {'title': movie.text,
+                     'img': movie_img_src,
+                     'link_to_watch': movie.get_attribute('href')
+                     }
+                )
             else:
                 continue
         except:
             continue
-    sleep(1.5)
     # loop over our movies and see if we can find one to match our query
     exact_match = None
     for movie in movies:
@@ -63,8 +85,6 @@ def netflix(bot, query):
             web.open(exact_match['link_to_watch'])
             bot.speak('Enjoy the movie')
         else:
-            bot.speak('Printing what i found to the screen for you sir')
-            print(json.dumps(movies, indent=2))
+            show_movies(movies, bot)
     else:
-        bot.speak('Printing what i found to the screen for you sir')
-        print(json.dumps(movies, indent=2))
+        show_movies(movies, bot)

@@ -1,5 +1,4 @@
 from lib.alfred.alfred import Alfred
-from lib.tvs.vizio.tv import VizioTV
 
 
 def main():
