@@ -15,10 +15,10 @@ TABLES['app'] = (
 TABLES['movie'] = (
     "CREATE TABLE `movie` ("
     "  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-    "  `title` varchar(255) NOT NULL,"
+    "  `title` varchar(300) NOT NULL UNIQUE,"
     "  `app_id` int(11) NOT NULL,"
-    "  `img` varchar(255) NOT NULL,"
-    "  `url` varchar(255) NOT NULL,"
+    "  `img` text NOT NULL,"
+    "  `url` varchar(500) NOT NULL,"
     "  FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE"
     ") ENGINE=InnoDB")
 
@@ -54,6 +54,7 @@ def init():
         try:
             print("Creating table {}: ".format(table_name), end='')
             cursor.execute(table_description)
+
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
                 print("already exists.")
@@ -61,7 +62,9 @@ def init():
                 print(err.msg)
         else:
             print("OK")
-
+    cursor.buffered = True
+    # cursor.execute("INSERT INTO app (id, name) VALUES (1,'Netflix')")
+    cnx.commit()
     cursor.close()
     cnx.close()
 

@@ -40,6 +40,7 @@ class Alfred(Voice):
         # initialize the databases
         for db_name, db in self.databases.items():
             db.init()
+        print(self.databases['movies'].test())
 
     def take_user_input(self):
         return voice_controller(self)
