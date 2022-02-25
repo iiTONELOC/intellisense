@@ -1,6 +1,6 @@
 INFO:pyvizio.cli:Turning OFF
 INFO:pyvizio.cli:OK
-Exception ignored in: <function _ProactorBasePipeTransport.__del__ at 0x00000234C7FC7AC0>
+Exception ignored in: <function _ProactorBasePipeTransport.__del__ at 0x000001EC20157AC0>
 Traceback (most recent call last):
   File "C:\Python310\lib\asyncio\proactor_events.py", line 116, in __del__
     self.close()

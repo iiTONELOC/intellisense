@@ -2,6 +2,8 @@ import os
 import sys
 from decouple import config
 
+from lib.databases.movies.db import Movie_DB
+
 from .voice.voice import Voice
 from .voice.voice_activation import voice_controller
 from .voice.commands import query_controller
@@ -16,7 +18,6 @@ BOTNAME = config('BOTNAME')
 
 
 def get_devices():
-
     rooms = [LivingRoom(), Kitchen(), Office()]
     room_data = {}
     for room in rooms:
@@ -31,8 +32,15 @@ class Alfred(Voice):
         sys.stdout.write("\nInitializing Please Wait...")
         super().__init__()
         self.rooms = get_devices()
+        self.databases = {
+            'movies': Movie_DB()
+        }
         self.input_mode = 'voice'
         sys.stdout.write(f"\n{BOTNAME} Status [{Colors.green('Online')}]\n\n")
+        # initialize the databases
+        for db_name, db in self.databases.items():
+            db.init()
+        print(self.databases['movies'].test())
 
     def take_user_input(self):
         return voice_controller(self)
