@@ -9,7 +9,7 @@ from decouple import config
 def write_results(results):
     UI_FOLDER = config('UI_FOLDER')
     with open(UI_FOLDER+'\\movies\\search_results.js', 'w') as f:
-        f.write('const data =' + results)
+        f.write('const data = ' + results)
 
 
 def show_movies(results, bot):
@@ -27,7 +27,8 @@ def netflix(bot, query):
     in_db = bot.databases['movies'].find_movie_by_title(
         query.split('netflix')[1].strip())
     #  If the movie is not in our DB then we can search Netflix
-    if len(in_db) == 0:
+
+    if not in_db:
         driver = webdriver.Edge(executable_path=config('EDGE_DRIVER'))
         driver.get('https://www.netflix.com/')
         log_in_btn = driver.find_element_by_class_name("authLinks")
@@ -48,7 +49,7 @@ def netflix(bot, query):
             '/html/body/div[1]/div/div/div[1]/div[1]/div[2]/div/div/ul/li[4]/div/a').click()
         sleep(3.5)
         driver.find_element_by_class_name(
-            'icon-search').click()
+            'searchBox').click()
         driver.find_element_by_id('searchInput').send_keys(
             query.split('netflix')[1])
         sleep(2.5)

@@ -1,9 +1,12 @@
 import json
 from decouple import config
 
+# THESE ARE THE SAME FOR NOW BC WE ARE ONLY LOADING ONE TYPE OF DATA
+# BUT HAVE ANTICIPATED THAT WE WILL LOAD MORE TYPES OF DATA
 
-def switch(action):
-    if action == 'devices':
+
+def switch(action):  # NOSONAR
+    if action == 'devices':  # NOSONAR
         return '\\devices.json'
     else:
         return '\\devices.json'

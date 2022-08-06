@@ -7,8 +7,6 @@ from lib.databases.movies.db import Movie_DB
 from .voice.voice import Voice
 from .voice.voice_activation import voice_controller
 from .voice.commands import query_controller
-from lib.rooms.living_room import LivingRoom
-from lib.rooms.kitchen import Kitchen
 from lib.rooms.office import Office
 from lib.utils.colors import Colors
 
@@ -18,7 +16,8 @@ BOTNAME = config('BOTNAME')
 
 
 def get_devices():
-    rooms = [LivingRoom(), Kitchen(), Office()]
+    # Room to expand here, for now just Office
+    rooms = [Office()]
     room_data = {}
     for room in rooms:
         room_data[room.name] = room.devices
@@ -36,11 +35,11 @@ class Alfred(Voice):
             'movies': Movie_DB()
         }
         self.input_mode = 'voice'
-        sys.stdout.write(f"\n{BOTNAME} Status [{Colors.green('Online')}]\n\n")
-        # initialize the databases
+
         for db_name, db in self.databases.items():
             db.init()
-        print(self.databases['movies'].test())
+
+        sys.stdout.write(f"\n{BOTNAME} Status [{Colors.green('Online')}]\n\n")
 
     def take_user_input(self):
         return voice_controller(self)
@@ -64,17 +63,19 @@ class Alfred(Voice):
         # FIXME: ADD TEXT MENU MODE
         # provide a traditional menu for times when listening to music or needing to use the microphone
         while self.input_mode == 'menu':
-            user_input = input(f"{Colors.magenta('$ ')}").strip().lower()
-            if user_input == 'exit':
+            try:
+                user_input = input(f"{Colors.magenta('$ ')}").strip().lower()
+                if user_input == 'exit':
+                    sys.exit(1)
+                elif user_input == 'activate voice mode':
+                    sys.stdout.write(
+                        f"\n{Colors.cyan(BOTNAME)}: Entering Voice Mode...\n")
+                    self.input_mode = 'voice'
+                    self.speak('Thanks for the nap sir!')
+                    self.run()
+                elif user_input == 'clear' or user_input == 'cls':
+                    os.system('cls')
+                else:
+                    query_controller(BOTNAME.lower() + " " + user_input, self)
+            except KeyboardInterrupt:
                 sys.exit(1)
-            elif user_input == 'activate voice mode':
-                sys.stdout.write(
-                    f"\n{Colors.cyan(BOTNAME)}: Entering Voice Mode...\n")
-                self.input_mode = 'voice'
-                self.speak('Thanks for the nap sir!')
-                self.run()
-            elif user_input == 'clear' or user_input == 'cls':
-                os.system('cls')
-            else:
-                query_controller(BOTNAME.lower() + " " + user_input, self)
-            pass

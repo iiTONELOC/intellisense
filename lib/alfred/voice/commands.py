@@ -1,23 +1,24 @@
-from lib.alfred.utils.entertainment.netflix import netflix
-from lib.alfred.utils.misc import tell_joke, give_advice, info_lookup, search
-from lib.alfred.utils.misc import give_current_weather, play_on_youtube
-from lib.tvs.vizio.tv_controller import office_tv_voice_controller
-from lib.tvs.lg.tv_controller import living_room_tv_voice_controller
-from lib.alfred.utils.os_controller.controller import os_query_handler
 from decouple import config
+from lib.wemo.controller import wemo_switch_controller
+from lib.tvs.vizio.tv_controller import office_tv_voice_controller
+from lib.alfred.utils.os_controller.controller import os_query_handler
+
+from lib.alfred.utils.entertainment.netflix import netflix
+from lib.alfred.utils.misc import tell_joke, give_advice, info_lookup, search,\
+    give_current_weather, play_on_youtube
+
 
 B_NAME = config('BOTNAME').lower()
 
 voice_commands = {
     # OS RELATED COMMANDS
-    f"{B_NAME} launch": lambda query, bot: os_query_handler(query, bot),
-    f"{B_NAME} open": lambda query, bot: os_query_handler(query, bot),
+    f"{B_NAME} launch": lambda query, bot: os_query_handler(query),
+    f"{B_NAME} open": lambda query, bot: os_query_handler(query),
     # home automation/devices
-    # kitchen
-    f"{B_NAME} toggle kitchen light": lambda query, bot: bot.devices['Switch 1'].toggle(),
+    # WeMo Devices
+    f"{B_NAME} turn": lambda query, bot: wemo_switch_controller(query, bot),
+    f"{B_NAME} toggle": lambda query, bot: wemo_switch_controller(query, bot),
     # office:
-    f"{B_NAME} living room tv": lambda query, bot: living_room_tv_voice_controller(bot, query),
-    # living room
     f"{B_NAME} office tv": lambda query, bot: office_tv_voice_controller(bot, query),
     #  BOT COMPUTER COMMANDS
     f"{B_NAME} netflix": lambda query, bot: netflix(bot, query),
@@ -25,7 +26,7 @@ voice_commands = {
     # WIKIPEDIA SEARCH SUMMARY
     f"{B_NAME} what is": lambda query, bot: info_lookup(bot, query),
     f"{B_NAME} tell me about": lambda query, bot: info_lookup(bot, query),
-    # _
+    # GOOFY
     f"{B_NAME} tell me a joke": lambda query, bot: tell_joke(bot),
     f"{B_NAME} can i have a tip": lambda query, bot: give_advice(bot),
     # DUCKDUCKGO SEARCH

@@ -55,6 +55,10 @@ def init():
             print("Creating table {}: ".format(table_name), end='')
             cursor.execute(table_description)
 
+        # SEED THE APP TABLE WITH THE STREAMING APP, CURRENTLY ONLY NETFLIX
+            if table_name == 'app':
+                cursor.execute("INSERT INTO app (name) VALUES ('Netflix')")
+
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
                 print("already exists.")
