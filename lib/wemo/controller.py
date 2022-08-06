@@ -1,3 +1,6 @@
+import re
+
+
 def _get_device_name(query, delimiter):
     return query.split(delimiter, 1)[1].strip()
 
@@ -11,24 +14,57 @@ def _build_device_dict(bot):
     return devices
 
 
+def _parse_query(query):
+    query += ' '  # Add a space for easier parsing
+    # The regex to search for the word 'to'
+    regex_two = re.compile(r'(\sto\s)')
+    # The regex to search for the word 'two'
+    regex_four = re.compile(r'(\sfor\s)')
+    match = regex_two.search(query)  # Holds the match object if found
+    match_four = regex_four.search(query)  # Holds the match object if found
+
+    if match is not None:
+        query = query.replace(match.group(0), ' two').strip()
+    elif match_four is not None:
+        query.replace(match_four.group(0), ' four').strip()
+    else:
+        return query.strip()
+
+
+def _handle_all(query, devices):
+    for device in devices.keys():
+        if 'all monitors' in query and 'monitor' in device or 'all switches'\
+            in query and 'switch' in device or 'all lights' in query\
+                and 'monitor' not in device:
+            if 'off' in query:
+                devices[device].off()
+            elif 'on' in query:
+                devices[device].on()
+            else:
+                devices[device].toggle()
+
+
 def wemo_switch_controller(query, bot):
 
+    device = None  # The device to control
+    query = _parse_query(query)  # handles oddities from voice recognition
+    # Dictionary of all wemo devices in the bot
     devices = _build_device_dict(bot)
-    device = None
 
-    if 'turn' in query or 'toggle' in query:
+    if 'turn' in query or 'toggle' in query:  # checked before here, being safe
         try:
-            if 'turn on' in query:
+            if 'all' in query:
+                _handle_all(query, devices)
+            elif 'turn on' in query:
                 device = devices[_get_device_name(query, 'on')]
                 device.on()
-
-            if 'turn off' in query:
+            elif 'turn off' in query:
                 device = devices[_get_device_name(query, 'off')]
                 device.off()
-
-            if 'toggle' in query:
+            elif 'toggle' in query:
                 device = devices[_get_device_name(query, 'toggle')]
                 device.toggle()
-
-        except KeyError:
+            else:
+                return
+        except Exception:
             print(f"Device not found!")

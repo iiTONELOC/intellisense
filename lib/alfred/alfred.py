@@ -31,9 +31,7 @@ class Alfred(Voice):
         sys.stdout.write("\nInitializing Please Wait...")
         super().__init__()
         self.rooms = get_devices()
-        self.databases = {
-            'movies': Movie_DB()
-        }
+        self.databases = {'movies': Movie_DB()}
         self.input_mode = 'voice'
 
         for db_name, db in self.databases.items():

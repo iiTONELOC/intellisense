@@ -29,17 +29,45 @@ class WemoSwitch(Wemo):
         self.serial_number = serial_number
         self.default_schedule = default_schedule
 
+    def _api(self):
+        devices = self.API
+        print('DEVICES:', devices)
+        for device in self.API:
+            if self.name == device.name:
+                return device
+
     def on(self):
-        self.API[0].on()
+        self._api().on()
 
     def off(self):
-        self.API[0].off()
+        self._api().off()
 
     def toggle(self):
-        self.API[0].toggle()
+        self._api().toggle()
 
     def __str__(self):
         return f"{self.name} ({self.location}) ({self.description})"
 
     def status(self):
-        return self.API.get_state()
+        return self._api().get_state()
+
+
+def create_wemo_outlet_ensure_connection(data):
+    # ENSURES THE CONNECTION TO THE DEVICE IS ESTABLISHED
+    print("\n    Creating Wemo Switch")
+    new_outlet = WemoSwitch(**dict(data))
+    res = None
+
+    def retry():
+        print('      ERROR: Could not connect to device')
+        print('      retrying...')
+        create_wemo_outlet_ensure_connection(data)
+    try:
+        print("    Switch Created! Verifying Connection...")
+        res = new_outlet.API[0].get_state()
+    except Exception:
+        retry()
+    finally:
+        if res == None:
+            retry()
+    return new_outlet

@@ -6,8 +6,6 @@ program_paths = {
 
 
 def os_query_handler(query):
-    print("OS HANDLER", query)
-
     prog = query.split('launch', 1)[1].strip() if 'launch' in query \
         else query.split('open', 1)[1]
 

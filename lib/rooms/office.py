@@ -1,10 +1,10 @@
 from .room import Room
-from lib.wemo import WemoSwitch
+from lib.wemo import create_wemo_outlet_ensure_connection
 from lib.tvs.vizio.tv import VizioTV
 
 
 def get_devices(self):
-    self.stdout(f"  Loading Office... ")
+    self.stdout(f"\n  Loading Office... ")
     # Use our loader helper to load the room data from our JSON file
     # self.loader is inherited from the Room class
     devices = self.loader('devices', 'office')
@@ -18,12 +18,11 @@ def get_devices(self):
 
         if device == 'outlets':
             for _props in props:
-                room_devices[_props['name']] = WemoSwitch(**dict(_props))
+                room_devices[_props['name']]\
+                    = create_wemo_outlet_ensure_connection(_props)
 
-    self.stdout(f"[{self.colors.green('OK')}]\n")
+    self.stdout(f"    [{self.colors.green('OK')}]\n")
 
-    print("OFFICE DEVICES:\n")
-    print(room_devices)
     return room_devices
 
 
