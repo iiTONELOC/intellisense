@@ -65,7 +65,7 @@ def create_wemo_outlet_ensure_connection(data):
         res = new_outlet._api().get_state()
     except Exception:
         retry()
-    finally:
-        if res == None:
-            retry()
-    return new_outlet
+    if res == None:
+        retry()
+    else:
+        return new_outlet
