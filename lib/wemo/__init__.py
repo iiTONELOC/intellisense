@@ -30,8 +30,6 @@ class WemoSwitch(Wemo):
         self.default_schedule = default_schedule
 
     def _api(self):
-        devices = self.API
-        print('DEVICES:', devices)
         for device in self.API:
             if self.name == device.name:
                 return device
@@ -64,7 +62,7 @@ def create_wemo_outlet_ensure_connection(data):
         create_wemo_outlet_ensure_connection(data)
     try:
         print("    Switch Created! Verifying Connection...")
-        res = new_outlet.API[0].get_state()
+        res = new_outlet._api().get_state()
     except Exception:
         retry()
     finally:

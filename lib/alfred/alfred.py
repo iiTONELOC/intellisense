@@ -26,54 +26,63 @@ def get_devices():
     return room_data
 
 
+def handle_voice_mode(self):
+    query = self.take_user_input()
+
+    if f'{BOTNAME.lower()} exit' in query:
+        sys.exit(1)
+    elif f'{BOTNAME.lower()} stop listening' in query:
+        self.speak("Entering text only mode!\n")
+        self.input_mode = 'menu'
+    else:
+        query_controller(query, self)
+
+
+def handle_text_mode(self):
+    user_input = input(f"{Colors.magenta('$ ')}").strip().lower()
+    if user_input == 'exit':
+        sys.exit(1)
+    elif user_input == 'activate voice mode':
+        sys.stdout.write(
+            f"\n{Colors.cyan(BOTNAME)}: Entering Voice Mode...\n")
+        self.input_mode = 'voice'
+        self.speak(f'Thanks for the nap, {USERNAME}!')
+        self.run()
+    elif user_input == 'clear' or user_input == 'cls':
+        os.system('cls')
+    else:
+        query_controller(BOTNAME.lower() + " " + user_input, self)
+
+
+def init_db(self):
+    for db in self.databases.values():
+        db.init()
+
+
 class Alfred(Voice):
     def __init__(self):
         sys.stdout.write("\nInitializing Please Wait...")
         super().__init__()
         self.rooms = get_devices()
         self.databases = {'movies': Movie_DB()}
-        self.input_mode = 'voice'
+        self.input_mode = 'menu'
 
-        for db_name, db in self.databases.items():
-            db.init()
-
+        init_db(self)
         sys.stdout.write(f"\n{BOTNAME} Status [{Colors.green('Online')}]\n\n")
 
     def take_user_input(self):
         return voice_controller(self)
 
     def run(self):
-
         while self.input_mode == 'voice':
             try:
-                query = self.take_user_input()
-                if f'{BOTNAME.lower()} exit' in query:
-                    sys.exit(1)
-                elif f'{BOTNAME.lower()} stop listening' in query:
-                    self.speak("Entering text only mode sir!\n")
-                    self.input_mode = 'menu'
-                else:
-                    query_controller(query, self)
+                handle_voice_mode(self)
 
             except KeyboardInterrupt:
                 sys.exit(1)
 
-        # FIXME: ADD TEXT MENU MODE
-        # provide a traditional menu for times when listening to music or needing to use the microphone
         while self.input_mode == 'menu':
             try:
-                user_input = input(f"{Colors.magenta('$ ')}").strip().lower()
-                if user_input == 'exit':
-                    sys.exit(1)
-                elif user_input == 'activate voice mode':
-                    sys.stdout.write(
-                        f"\n{Colors.cyan(BOTNAME)}: Entering Voice Mode...\n")
-                    self.input_mode = 'voice'
-                    self.speak('Thanks for the nap sir!')
-                    self.run()
-                elif user_input == 'clear' or user_input == 'cls':
-                    os.system('cls')
-                else:
-                    query_controller(BOTNAME.lower() + " " + user_input, self)
+                handle_text_mode(self)
             except KeyboardInterrupt:
                 sys.exit(1)
