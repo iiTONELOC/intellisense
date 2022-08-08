@@ -8,5 +8,5 @@ class Room:
         self.name = name
         self.devices = {}
         self.loader = load_data_from_json
-        self.Colors = Colors
+        self.colors = Colors
         self.stdout = stdout.write

@@ -4,7 +4,7 @@ from lib.alfred.alfred import Alfred
 def main():
     a = Alfred()  # instantiate Alfred class
     a.greet_user()  # greet user
-    a.run()  # method to run Alfred defaults to voice mode
+    a.run()  # method to run Alfred defaults to text mode
 
 
 if __name__ == '__main__':

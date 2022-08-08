@@ -1,6 +1,6 @@
 .vscode
-tinytuya.json
 .env
 venv
-lib\vizio\temp\
+lib/vizio/temp/
+lib/data/devices.json
 __pycache__/

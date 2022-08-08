@@ -6,6 +6,7 @@ from datetime import datetime
 from lib.utils.colors import Colors
 
 BOTNAME = config('BOTNAME')
+USER = config('USER')
 
 
 class Voice:
@@ -26,13 +27,12 @@ class Voice:
         for text in list_of_text:
             self.speak(text)
 
-    def greet_user(self, username=None):
-        # FIXME add username
+    def greet_user(self):
         hour = datetime.now().hour
         if (hour >= 6) and (hour < 12):
-            self.speak(f"Good Morning sir")
+            self.speak(f"Good Morning {USER}")
         elif (hour >= 12) and (hour < 16):
-            self.speak(f"Good afternoon sir")
+            self.speak(f"Good afternoon {USER}")
         elif (hour >= 16) and (hour < 19):
-            self.speak(f"Good Evening sir")
+            self.speak(f"Good Evening {USER}")
         self.speak(f"I am {BOTNAME}. How may I assist you?")

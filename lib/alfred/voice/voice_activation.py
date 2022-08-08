@@ -1,13 +1,11 @@
 import sys
-from decouple import config
-import speech_recognition as sr
 from random import choice
-from datetime import datetime
+import speech_recognition as sr
+
 from lib.utils.colors import Colors
 
 
 def voice_controller(self):
-    B_NAME = config('BOTNAME')
     r = sr.Recognizer()
     m = sr.Microphone()
     with m as source:
@@ -15,10 +13,11 @@ def voice_controller(self):
         r.energy_threshold = r.energy_threshold * 1.12
         # stdout.write(f"[{Colors.green(r.energy_threshold)}]\n")
         r.pause_threshold = 2
-        sys.stdout.write(
-            f"{Colors.cyan('% ')}listening...\n")
-        audio = r.listen(source)
+
         try:
+            sys.stdout.write(
+                f"{Colors.cyan('% ')}listening...\n")
+            audio = r.listen(source)
             sys.stdout.write(
                 f"{Colors.cyan('% ')}recognizing...\n")
             query = str(r.recognize_google(audio, language='en-us')).lower()
