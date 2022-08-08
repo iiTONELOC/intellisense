@@ -2,7 +2,7 @@ import os
 import sys
 from decouple import config
 
-from lib.databases.movies.db import Movie_DB
+from lib.databases import DB
 
 from .voice.voice import Voice
 from .voice.voice_activation import voice_controller
@@ -54,20 +54,15 @@ def handle_text_mode(self):
         query_controller(BOTNAME.lower() + " " + user_input, self)
 
 
-def init_db(self):
-    for db in self.databases.values():
-        db.init()
-
-
 class Alfred(Voice):
     def __init__(self):
         sys.stdout.write("\nInitializing Please Wait...")
         super().__init__()
         self.rooms = get_devices()
-        self.databases = {'movies': Movie_DB()}
+        self.database = DB()
         self.input_mode = 'menu'
 
-        init_db(self)
+        self.database.init()
         sys.stdout.write(f"\n{BOTNAME} Status [{Colors.green('Online')}]\n\n")
 
     def take_user_input(self):

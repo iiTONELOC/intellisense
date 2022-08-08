@@ -1,15 +1,11 @@
-from decouple import config
-
-from .schema import init
 from .queries import movie_queries
-from ..connection import Connection
 import mysql.connector as mysql_connector
+from lib.databases.connection import Connection
 
 
-class Movie_DB(Connection):
-    def __init__(self, db_name=config('MOVIE_DB_NAME')):
-        super().__init__(db_name)
-        self.init = lambda: init()
+class Movies(Connection):
+    def __init__(self):
+        super().__init__()
         self.queries = movie_queries
 
     def save_movie(self, title, img, app_id, link_to_watch):
@@ -30,9 +26,12 @@ class Movie_DB(Connection):
             cnx.commit()
             cursor.close()
             cnx.close()
-            return res
+
+        return res
 
     def find_movie_by_title(self, title):
+        print("IN MOVIE BY TITLE")
+        print(title)
         res = None
         try:
             cnx = self.connection()
@@ -47,10 +46,11 @@ class Movie_DB(Connection):
         finally:
             cursor.close()
             cnx.close()
-            if len(res) > 0:
-                return res
-            else:
-                return False
+
+        if len(res) > 0:
+            return res
+        else:
+            return False
 
     def test(self):
         res = None
@@ -67,7 +67,8 @@ class Movie_DB(Connection):
         finally:
             cursor.close()
             cnx.close()
-            if len(res) > 0:
-                return res
-            else:
-                return False
+
+        if len(res) > 0:
+            return res
+        else:
+            return False

@@ -21,10 +21,11 @@ def show_movies(results, bot):
 
 
 def netflix(bot, query):
+    movie_db = bot.database.models['movies']
     #  Holds the movies queried from Netflix
     movies = []
     #  Searches our DB first and holds results
-    in_db = bot.databases['movies'].find_movie_by_title(
+    in_db = movie_db.find_movie_by_title(
         query.split('netflix')[1].strip())
     #  If the movie is not in our DB then we can search Netflix
 
@@ -86,7 +87,7 @@ def netflix(bot, query):
             for movie in movies:
                 try:
                     #  1 is the id for the netflix app in our db
-                    bot.databases['movies'].save_movie(
+                    movie_db.save_movie(
                         movie['title'], movie['img'], 1, movie['link_to_watch'])
                 except Exception as e:
                     #  Record did not save
