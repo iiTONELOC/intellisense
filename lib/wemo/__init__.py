@@ -47,7 +47,8 @@ class WemoSwitch(Wemo):
         return f"{self.name} ({self.location}) ({self.description})"
 
     def status(self):
-        return self._api().get_state()
+        # force_update may be needed to ensure the latest status is returned
+        return self._api().get_state(force_update=True)
 
 
 def create_wemo_outlet_ensure_connection(data):

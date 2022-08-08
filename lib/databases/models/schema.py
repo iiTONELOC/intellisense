@@ -3,7 +3,7 @@ from decouple import config
 import mysql.connector
 from mysql.connector import errorcode
 
-MOVIE_DB_NAME = config('MOVIE_DB_NAME')
+DB_NAME = config('DB_NAME')
 
 TABLES = {}
 TABLES['app'] = (
@@ -22,11 +22,19 @@ TABLES['movie'] = (
     "  FOREIGN KEY (`app_id`) REFERENCES `app` (`id`) ON DELETE CASCADE"
     ") ENGINE=InnoDB")
 
+TABLES['user'] = (
+    "CREATE TABLE `user` ("
+    "  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+    "  `username` varchar(55) NOT NULL UNIQUE,"
+    "  `password` varchar(150) NOT NULL"
+    ") ENGINE=InnoDB"
+)
+
 
 def create_database(cursor):
     try:
         cursor.execute(
-            "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(MOVIE_DB_NAME))
+            "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(DB_NAME))
     except mysql.connector.Error as err:
         print("Failed creating database: {}".format(err))
         exit(1)
@@ -38,11 +46,11 @@ def init():
 
     cursor = cnx.cursor()
     try:
-        cursor.execute("USE {}".format(MOVIE_DB_NAME))
+        cursor.execute("USE {}".format(DB_NAME))
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_BAD_DB_ERROR:
             create_database(cursor)
-            cnx.database = MOVIE_DB_NAME
+            cnx.database = DB_NAME
         else:
             print(err)
             exit(1)
@@ -56,15 +64,10 @@ def init():
             if table_name == 'app':
                 cursor.execute("INSERT INTO app (name) VALUES ('Netflix')")
 
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-                None
-            else:
-                print(err.msg)
-        else:
-            print("OK")
+        except mysql.connector.Error:
+            pass
+
     cursor.buffered = True
-    # cursor.execute("INSERT INTO app (id, name) VALUES (1,'Netflix')")
     cnx.commit()
     cursor.close()
     cnx.close()
